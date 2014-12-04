@@ -4,17 +4,17 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.hibernate.SessionFactory;
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import study.gordon.titan.common.dao.BaseDao;
 import study.gordon.titan.common.entity.BaseEntity;
 
 public abstract class BaseDaoImpl<E extends BaseEntity<K>, K extends Serializable> implements BaseDao<E, K> {
 
-    @Resource
-    protected SessionFactory sessionFactory;
+    @PersistenceContext
+    protected EntityManager em;
 
     protected Class<E> entityClass;
 
@@ -24,36 +24,43 @@ public abstract class BaseDaoImpl<E extends BaseEntity<K>, K extends Serializabl
         this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[0];
     }
 
-    @SuppressWarnings("unchecked")
     public E findById(K id) {
-        return (E) sessionFactory.getCurrentSession().get(entityClass, id);
+        return (E) em.find(entityClass, id);
     }
 
     @SuppressWarnings("unchecked")
     public List<E> getAll() {
-        return sessionFactory.getCurrentSession().createQuery("from " + entityClass.getName() + " x").list();
+        return em.createQuery("from " + getEntityName(entityClass) + " x").getResultList();
     }
 
     public long count() {
-        Number n = (Number) sessionFactory.getCurrentSession()
-                .createQuery("select count(*) from " + entityClass.getName() + " x").uniqueResult();
+        Number n = (Number) em.createQuery("select count(*) from " + getEntityName(entityClass) + " x")
+                .getSingleResult();
         return n.longValue();
     }
 
     public void create(E entity) {
-        sessionFactory.getCurrentSession().save(entity);
+        em.persist(entity);
     }
 
     public void update(E entity) {
-        sessionFactory.getCurrentSession().update(entity);
+        em.merge(entity);
     }
 
     public void delete(E entity) {
-        sessionFactory.getCurrentSession().delete(entity);
+        em.remove(entity);
     }
 
     public void deleteById(K id) {
-        delete(findById(id));
+        delete(em.getReference(entityClass, id));
     }
 
+    protected <T> String getEntityName(Class<T> entityClass) {
+        String entityname = entityClass.getSimpleName();
+        Entity entity = entityClass.getAnnotation(Entity.class);
+        if (entity.name() != null && !"".equals(entity.name())) {
+            entityname = entity.name();
+        }
+        return entityname;
+    }
 }

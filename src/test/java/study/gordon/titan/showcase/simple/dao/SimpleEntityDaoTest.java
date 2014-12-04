@@ -24,7 +24,7 @@ public class SimpleEntityDaoTest {
 
     @Test
     @Rollback(false)
-    public final void testAdd() {
+    public final void simpleTest() {
         SimpleEntity simpleEntity = new SimpleEntity();
         simpleEntity.setAge(22);
         simpleEntity.setBirthday(new Date());
@@ -34,6 +34,10 @@ public class SimpleEntityDaoTest {
 
         simpleEntityDao.create(simpleEntity);
 
+        simpleEntity.setName("Guest");
+        simpleEntityDao.update(simpleEntity);
+
+        simpleEntityDao.delete(simpleEntity);
     }
 
 }

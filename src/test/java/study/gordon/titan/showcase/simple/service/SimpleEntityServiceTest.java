@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import study.gordon.titan.showcase.simple.entity.Gender;
 import study.gordon.titan.showcase.simple.entity.SimpleEntity;
@@ -22,7 +23,8 @@ public class SimpleEntityServiceTest {
 
     @Test
     @Rollback(false)
-    public final void testAdd() {
+    @Transactional
+    public final void simpleTest() {
         SimpleEntity simpleEntity = new SimpleEntity();
         simpleEntity.setAge(22);
         simpleEntity.setBirthday(new Date());
@@ -36,8 +38,14 @@ public class SimpleEntityServiceTest {
         simpleEntity.setName("Test");
         simpleEntityService.create(simpleEntity);
         
+        simpleEntity.setName("Guest");
+        simpleEntityService.update(simpleEntity);
+
+        
         simpleEntityService.delete(simpleEntity);
 
+        simpleEntity = simpleEntityService.findById(2L);
+        System.out.println(simpleEntity.getBirthday());
     }
 
 }
