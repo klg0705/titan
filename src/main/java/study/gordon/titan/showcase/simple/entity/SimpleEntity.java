@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import study.gordon.titan.common.entity.BaseEntity;
 
 @Entity
@@ -21,6 +23,7 @@ public class SimpleEntity extends BaseEntity<Long> {
     private Integer age;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date birthday;
 
     @Enumerated(value = EnumType.STRING)
