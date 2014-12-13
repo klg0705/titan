@@ -4,9 +4,12 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +42,12 @@ public class SimpleEntityController {
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public String create(SimpleEntity simpleEntity, RedirectAttributes redirectAttributes) {
+    public String create(Model model, @ModelAttribute("simple") @Valid SimpleEntity simpleEntity, BindingResult result,
+            RedirectAttributes redirectAttributes) {
+        if (hasError(simpleEntity, result)) {
+            model.addAttribute("action", "create");
+            return "simple/simpleForm";
+        }
         simpleEntityService.create(simpleEntity);
         redirectAttributes.addFlashAttribute("message", "创建成功");
         return "redirect:/simple";
@@ -53,7 +61,12 @@ public class SimpleEntityController {
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public String update(@ModelAttribute("simple") SimpleEntity simpleEntity, RedirectAttributes redirectAttributes) {
+    public String update(Model model, @ModelAttribute("simple") @Valid SimpleEntity simpleEntity, BindingResult result,
+            RedirectAttributes redirectAttributes) {
+        if (hasError(simpleEntity, result)) {
+            model.addAttribute("action", "update");
+            return "simple/simpleForm";
+        }
         simpleEntityService.update(simpleEntity);
         redirectAttributes.addFlashAttribute("message", "更新成功");
         return "redirect:/simple";
@@ -67,10 +80,14 @@ public class SimpleEntityController {
     }
 
     @ModelAttribute
-    public void getTask(@RequestParam(value = "id", defaultValue = "-1") Long id, Model model) {
+    public void getSimpleEntity(@RequestParam(value = "id", defaultValue = "-1") Long id, Model model) {
         if (id != -1) {
             model.addAttribute("simple", simpleEntityService.findById(id));
         }
     }
 
+    private boolean hasError(SimpleEntity simpleEntity, BindingResult result) {
+        Assert.notNull(simpleEntity);
+        return result.hasErrors();
+    }
 }

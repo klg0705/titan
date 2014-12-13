@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <fmt:formatDate value="${simple.birthday}" var="birthday" pattern="yyyy-MM-dd" />
 
@@ -9,42 +11,44 @@
 <head>
 <title>Simple Entity Management</title>
 </head>
-
 <body>
-  <form id="inputForm" action="${ctx}/simple/${action}" method="post">
-    <input type="hidden" name="id" value="${simple.id}" />
+  <form:form id="inputForm" action="${ctx}/simple/${action}" method="post" modelAttribute="simple">
+    <form:errors path="*" />
+    <form:hidden path="id" />
     <fieldset>
       <legend>
         <small>Simple Entity Management</small>
       </legend>
       <div>
-        <label>Name:</label>
+        <form:label path="name">Name:</form:label>
         <div>
-          <input type="text" id="entity_name" name="name" value="${simple.name}" />
+          <form:input path="name" />
+          <form:errors path="name" />
         </div>
       </div>
       <div>
-        <label>Age:</label>
+        <form:label path="age">Age:</form:label>
         <div>
-          <input type="text" id="entity_age" name="age" value="${simple.age}" />
+          <form:input path="age" />
+          <form:errors path="age" />
         </div>
       </div>
       <div>
-        <label>Birthday:</label>
+        <form:label path="birthday">Birthday:</form:label>
         <div>
-          <input type="text" id="entity_birthday" name="birthday" value="${birthday}" />
+          <form:input path="birthday" />
         </div>
       </div>
       <div>
-        <label>Gender:</label>
+        <form:label path="gender">Gender:</form:label>
         <div>
-          <input type="text" id="entity_gender" name="gender" value="${simple.gender}" />
+          <form:input path="gender" />
         </div>
       </div>
       <div>
         <input id="submit_btn" type="submit" value="提交" />&nbsp; <input id="cancel_btn" type="button" value="返回" onclick="history.back();" />
       </div>
     </fieldset>
-  </form>
+  </form:form>
 </body>
 </html>

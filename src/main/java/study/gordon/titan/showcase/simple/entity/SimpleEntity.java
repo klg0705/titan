@@ -9,7 +9,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import study.gordon.titan.common.entity.BaseEntity;
@@ -18,12 +21,15 @@ import study.gordon.titan.common.entity.BaseEntity;
 @Table(name = "SHOWCASE_SIMPLE")
 public class SimpleEntity extends BaseEntity<Long> {
 
+    @NotEmpty(message = "名字不能为空")
     private String name;
 
+    @NotNull
+    @Range(min = 0, max = 150, message = "年龄必须在0-150之间")
     private Integer age;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     @Enumerated(value = EnumType.STRING)
