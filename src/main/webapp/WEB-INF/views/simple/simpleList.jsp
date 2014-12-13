@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -24,7 +26,7 @@
       </tr>
     </thead>
     <tbody>
-      <c:forEach items="${simpleEntities}" var="simple">
+      <c:forEach items="${queryResult.resultList}" var="simple">
         <tr>
           <td><a href="${ctx}/simple/update/${simple.id}">${simple.name}</a></td>
           <td>${simple.age}</td>
@@ -35,6 +37,8 @@
       </c:forEach>
     </tbody>
   </table>
+
+  <tags:pagination page="${queryResult}"/>
 
   <div>
     <a class="btn" href="${ctx}/simple/create">创建</a>

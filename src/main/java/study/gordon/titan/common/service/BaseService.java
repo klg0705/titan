@@ -1,12 +1,14 @@
 package study.gordon.titan.common.service;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import study.gordon.titan.common.entity.BaseEntity;
+import study.gordon.titan.common.entity.QueryResult;
 
 public interface BaseService<E extends BaseEntity<K>, K extends Serializable> {
-    
+
     E findById(K id);
 
     List<E> getAll();
@@ -20,5 +22,14 @@ public interface BaseService<E extends BaseEntity<K>, K extends Serializable> {
     void delete(E entity);
 
     void deleteById(K id);
+
+    QueryResult<E> getScrollData(int firstindex, int maxresult, String wherejpql, Object[] queryParams,
+            LinkedHashMap<String, String> orderby);
+
+    QueryResult<E> getScrollData(int firstindex, int maxresult, String wherejpql, Object[] queryParams);
+
+    QueryResult<E> getScrollData(int firstindex, int maxresult, LinkedHashMap<String, String> orderby);
+
+    QueryResult<E> getScrollData(int firstindex, int maxresult);
 
 }

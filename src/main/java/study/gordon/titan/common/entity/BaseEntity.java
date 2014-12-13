@@ -9,20 +9,20 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 @MappedSuperclass
-public class BaseEntity<ID extends Serializable> {
+public class BaseEntity<K extends Serializable> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private ID id;
+	private K id;
 
 	@Version
 	private Integer version;
 
-    public ID getId() {
+    public K getId() {
         return id;
     }
 
-    public void setId(ID id) {
+    public void setId(K id) {
         this.id = id;
     }
 

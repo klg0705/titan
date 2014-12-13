@@ -1,6 +1,7 @@
 package study.gordon.titan.common.service.impl;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import study.gordon.titan.common.dao.BaseDao;
 import study.gordon.titan.common.entity.BaseEntity;
+import study.gordon.titan.common.entity.QueryResult;
 import study.gordon.titan.common.service.BaseService;
 
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -48,6 +50,23 @@ public abstract class BaseServiceImpl<E extends BaseEntity<K>, K extends Seriali
     @Transactional
     public void deleteById(K id) {
         baseDao.deleteById(id);
+    }
+
+    public QueryResult<E> getScrollData(int firstindex, int maxresult, String wherejpql, Object[] queryParams,
+            LinkedHashMap<String, String> orderby) {
+        return baseDao.getScrollData(firstindex, maxresult, wherejpql, queryParams, orderby);
+    }
+
+    public QueryResult<E> getScrollData(int firstindex, int maxresult, String wherejpql, Object[] queryParams) {
+        return baseDao.getScrollData(firstindex, maxresult, wherejpql, queryParams);
+    }
+
+    public QueryResult<E> getScrollData(int firstindex, int maxresult, LinkedHashMap<String, String> orderby) {
+        return baseDao.getScrollData(firstindex, maxresult, orderby);
+    }
+
+    public QueryResult<E> getScrollData(int firstindex, int maxresult) {
+        return baseDao.getScrollData(firstindex, maxresult);
     }
 
 }

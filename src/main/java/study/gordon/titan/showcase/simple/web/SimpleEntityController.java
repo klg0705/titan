@@ -1,7 +1,5 @@
 package study.gordon.titan.showcase.simple.web;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import study.gordon.titan.common.entity.QueryResult;
 import study.gordon.titan.showcase.simple.entity.SimpleEntity;
 import study.gordon.titan.showcase.simple.service.SimpleEntityService;
 
@@ -24,13 +23,19 @@ import study.gordon.titan.showcase.simple.service.SimpleEntityService;
 @RequestMapping(value = "/simple")
 public class SimpleEntityController {
 
+    private static final int PAGE_SIZE = 5;
+
     @Resource
     private SimpleEntityService simpleEntityService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String list(Model model, ServletRequest request) {
-        List<SimpleEntity> simpleEntities = simpleEntityService.getAll();
-        model.addAttribute("simpleEntities", simpleEntities);
+    public String list(@RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model,
+            ServletRequest request) {
+
+        QueryResult<SimpleEntity> qr = simpleEntityService.getScrollData(PAGE_SIZE * (pageNumber - 1), PAGE_SIZE);
+        qr.setPage(pageNumber);
+        qr.setPageSize(PAGE_SIZE);
+        model.addAttribute("queryResult", qr);
         return "simple/simpleList";
     }
 
