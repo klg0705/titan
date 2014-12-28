@@ -49,4 +49,6 @@ http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <tx:annotation-driven transaction-manager="transactionManager" />
 
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
 </beans>
