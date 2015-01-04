@@ -16,8 +16,8 @@
                 <constructor-arg value="UTF-8" />
             </bean>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                <property name="prettyPrint" value="true"/>
-            </bean>         
+                <property name="prettyPrint" value="true" />
+            </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
 
@@ -28,6 +28,14 @@
 
     <mvc:default-servlet-handler />
 
-    <mvc:view-controller path="/" view-name="redirect:/simple" />
+    <mvc:view-controller path="/" view-name="redirect:/sandbox" />
+
+    <bean name="/sandbox" class="org.springframework.web.servlet.mvc.ParameterizableViewController">
+        <property name="viewName" value="sandbox/sandbox" />
+    </bean>
+
+    <bean name="/sandbox2" class="org.springframework.web.servlet.mvc.ParameterizableViewController">
+        <property name="viewName" value="sandbox/sandbox2" />
+    </bean>
 
 </beans>
