@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +21,11 @@ import study.gordon.titan.showcase.simple.entity.SimpleEntity;
 @RequestMapping(value = "/api/v1/sandbox")
 public class SandboxRestController {
 
+    private static final Logger logger = LoggerFactory.getLogger(SandboxRestController.class);
+
     @RequestMapping(value = "/case1", method = RequestMethod.POST, consumes = MediaTypes.TEXT_PLAIN)
     public String textToText(@RequestBody String body) {
+        logger.info("Test slf4j output in \"{}\" method. Request body is \"{}\".", "textToText", body);
         return "Hello " + body;
     }
 
@@ -41,7 +46,7 @@ public class SandboxRestController {
     public ResponseEntity<String> jsonToText(@RequestBody SimpleEntity simple) {
         return new ResponseEntity<String>("cool", HttpStatus.CREATED);
     }
-    
+
     @RequestMapping(value = "/case5", method = RequestMethod.POST, consumes = MediaTypes.JSON)
     public List<SimpleEntity> jsonToList(@RequestBody SimpleEntity simple) {
         List<SimpleEntity> result = new ArrayList<SimpleEntity>();

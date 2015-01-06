@@ -49,7 +49,7 @@ public class SimpleEntityRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaTypes.JSON)
-    public ResponseEntity<?> create(@RequestBody SimpleEntity simple, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<String> create(@RequestBody SimpleEntity simple, UriComponentsBuilder uriBuilder) {
         // 调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
         BeanValidators.validateWithException(validator, simple);
 
@@ -61,18 +61,18 @@ public class SimpleEntityRestController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(uri);
 
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaTypes.JSON)
-    public ResponseEntity<?> update(@RequestBody SimpleEntity simple) {
+    public ResponseEntity<String> update(@RequestBody SimpleEntity simple) {
         // 调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
         BeanValidators.validateWithException(validator, simple);
 
         simpleEntityService.update(simple);
 
         // 按Restful约定，返回204状态码, 无内容. 也可以返回200状态码.
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

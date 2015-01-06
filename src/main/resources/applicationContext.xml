@@ -12,6 +12,8 @@ http://www.springframework.org/schema/context/spring-context.xsd
 http://www.springframework.org/schema/aop
 http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:/application.properties" />
+
     <context:annotation-config />
     <context:component-scan base-package="study.gordon.titan">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
@@ -19,10 +21,10 @@ http://www.springframework.org/schema/aop/spring-aop.xsd">
     </context:component-scan>
 
     <bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/titan?useUnicode=true&amp;characterEncoding=UTF-8" />
-        <property name="username" value="root" />
-        <property name="password" value="root123" />
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
     </bean>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
