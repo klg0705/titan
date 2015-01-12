@@ -1,72 +1,62 @@
 package study.gordon.titan.common.service.impl;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import study.gordon.titan.common.dao.BaseDao;
+import study.gordon.titan.common.dao.BaseRepository;
 import study.gordon.titan.common.entity.BaseEntity;
-import study.gordon.titan.common.entity.QueryResult;
 import study.gordon.titan.common.service.BaseService;
 
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 public abstract class BaseServiceImpl<E extends BaseEntity<K>, K extends Serializable> implements BaseService<E, K> {
 
     @Resource
-    protected BaseDao<E, K> baseDao;
+    protected BaseRepository<E, K> baseRepository;
 
     public E findById(K id) {
-        return baseDao.findById(id);
+        return baseRepository.findOne(id);
     }
 
     public List<E> getAll() {
-        return baseDao.getAll();
+        return baseRepository.findAll();
     }
 
     public long count() {
-        return baseDao.count();
+        return baseRepository.count();
     }
 
     @Transactional
     public void create(E entity) {
-        baseDao.create(entity);
+        baseRepository.save(entity);
     }
 
     @Transactional
     public void update(E entity) {
-        baseDao.update(entity);
+        baseRepository.save(entity);
     }
 
     @Transactional
     public void delete(E entity) {
-        baseDao.delete(entity);
+        baseRepository.delete(entity);
     }
 
     @Transactional
     public void deleteById(K id) {
-        baseDao.deleteById(id);
+        baseRepository.delete(id);
     }
 
-    public QueryResult<E> getScrollData(int firstindex, int maxresult, String wherejpql, Object[] queryParams,
-            LinkedHashMap<String, String> orderby) {
-        return baseDao.getScrollData(firstindex, maxresult, wherejpql, queryParams, orderby);
-    }
-
-    public QueryResult<E> getScrollData(int firstindex, int maxresult, String wherejpql, Object[] queryParams) {
-        return baseDao.getScrollData(firstindex, maxresult, wherejpql, queryParams);
-    }
-
-    public QueryResult<E> getScrollData(int firstindex, int maxresult, LinkedHashMap<String, String> orderby) {
-        return baseDao.getScrollData(firstindex, maxresult, orderby);
-    }
-
-    public QueryResult<E> getScrollData(int firstindex, int maxresult) {
-        return baseDao.getScrollData(firstindex, maxresult);
+    @Override
+    public Page<E> findAll(int pageNum, int pageSize, Sort sort) {
+        PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, sort);
+        return baseRepository.findAll(pageRequest);
     }
 
 }
