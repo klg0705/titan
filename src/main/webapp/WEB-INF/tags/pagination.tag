@@ -1,5 +1,5 @@
 <%@ tag pageEncoding="UTF-8"%>
-<%@ attribute name="page" type="study.gordon.titan.common.entity.QueryResult" required="true"%>
+<%@ attribute name="page" type="org.springframework.data.domain.Page" required="true"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -51,22 +51,21 @@
 	border-color: #ddd;
 }
 </style>
-
 <c:set var="displayRange" value="3" />
-<c:set var="current" value="${page.page}" />
+<c:set var="current" value="${page.number + 1}" />
 <c:set var="begin" value="${current - displayRange}" />
 <c:if test="${begin < 1}">
   <c:set var="begin" value="${1}" />
 </c:if>
 <c:set var="end" value="${current + displayRange}" />
-<c:if test="${end > page.totalPage}">
-  <c:set var="end" value="${page.totalPage}" />
+<c:if test="${end > page.totalPages}">
+  <c:set var="end" value="${page.totalPages}" />
 </c:if>
 
 <div class="pagination">
   <ul>
     <c:choose>
-      <c:when test="${page.firstPage}">
+      <c:when test="${current <= 1}">
         <li class="disabled"><a href="#">&lt;&lt;</a></li>
         <li class="disabled"><a href="#">&lt;</a></li>
       </c:when>
@@ -88,13 +87,13 @@
     </c:forEach>
 
     <c:choose>
-      <c:when test="${page.lastPage}">
+      <c:when test="${current >= page.totalPages}">
         <li class="disabled"><a href="#">&gt;</a></li>
         <li class="disabled"><a href="#">&gt;&gt;</a></li>
       </c:when>
       <c:otherwise>
         <li><a href="?page=${current + 1}">&gt;</a></li>
-        <li><a href="?page=${page.totalPage}">&gt;&gt;</a></li>
+        <li><a href="?page=${page.totalPages}">&gt;&gt;</a></li>
       </c:otherwise>
     </c:choose>
   </ul>

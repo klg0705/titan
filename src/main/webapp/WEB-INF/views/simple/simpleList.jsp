@@ -38,7 +38,7 @@
     </tbody>
   </table>
 
-  <tags:pagination page="${queryResult}"/>
+  <tags:mypagination page="${queryResult}"/>
 
   <div>
     <a class="btn" href="${ctx}/simple/create">创建</a>

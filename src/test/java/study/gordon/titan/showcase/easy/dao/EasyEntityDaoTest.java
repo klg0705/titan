@@ -25,7 +25,7 @@ import study.gordon.titan.showcase.easy.repository.EasyEntityDao;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring-test.xml" })
 @Transactional
-public class EasyDaoTest {
+public class EasyEntityDaoTest {
 
     @Resource
     private EasyEntityDao easyDao;

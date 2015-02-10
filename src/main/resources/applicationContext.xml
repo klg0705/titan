@@ -16,6 +16,18 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <context:property-placeholder ignore-unresolvable="true" location="classpath:/application.properties" />
 
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:resources</value>
+                <value>classpath:messages</value>
+            </list>
+        </property>
+        <property name="useCodeAsDefaultMessage" value="${bundleMessage.showCodeIfNonexistent}" />
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="cacheSeconds" value="0" />
+    </bean>
+
     <context:annotation-config />
     <context:component-scan base-package="study.gordon.titan">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
@@ -51,11 +63,14 @@ http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
 
-    <tx:annotation-driven transaction-manager="transactionManager" />
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 
-    <jpa:repositories base-package="study.gordon.titan.showcase" transaction-manager-ref="transactionManager"
+    <jpa:repositories base-package="study.gordon.titan" transaction-manager-ref="transactionManager"
         entity-manager-factory-ref="entityManagerFactory" />
 
-    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
 
 </beans>
